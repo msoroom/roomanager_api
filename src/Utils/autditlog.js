@@ -18,7 +18,7 @@ const writer = () => {
 };
 
 const setuplogs = (a) => {
-  fs.mkdirSync(path.join(__dirname, "/Utils/"), { recursive: true });
+  fs.mkdirSync(path.join(__dirname, "/logs"), { recursive: true });
 };
 
 setInterval(writer, 1000);
