@@ -1,14 +1,24 @@
 const express = require("express");
 const router = new express.Router();
+
 const User = require("../models/user");
 const auth = require("../middleware/auth");
-
 const auditlog = require("../middleware/auditlog");
+const ppp = require("../Utils/GenOhneBezug");
 
 router.post("/users", async (req, res) => {
   const user = new User({
     ...req.body,
   });
+
+  const pwd = ppp.genPassword();
+
+  user.password = pwd;
+
+  if (req.body.token !== process.env.TOKEN) {
+    console.log(user.token);
+    return res.send({ error: "Invalid Token" });
+  }
 
   user.perms = {
     see_pics: true,
@@ -24,7 +34,7 @@ router.post("/users", async (req, res) => {
     await user.save();
     const token = await user.generateAuthToken();
     res.cookie("auth_token", token);
-    res.status(201).send({ user, token });
+    res.status(201).send({ user, pwd, token });
   } catch (e) {
     res.status(401).send(e);
   }
