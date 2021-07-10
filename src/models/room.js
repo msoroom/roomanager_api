@@ -33,6 +33,12 @@ const roomSchema = new mongoose.Schema(
         },
       },
     ],
+    compartment: {
+      type: Number,
+      default: 0
+
+    }
+    
   },
 
   //kein plan
@@ -41,6 +47,13 @@ const roomSchema = new mongoose.Schema(
   }
 );
 
-const roomModel = mongoose.model("room", roomSchema);
+
+roomSchema.virtual("room", {
+  ref: "Room",
+  localField: "_id",
+  foreignField: "owner",
+});
+
+const roomModel = mongoose.model("Room", roomSchema);
 
 module.exports = roomModel;
