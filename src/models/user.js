@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema(
       },
     },
     perms: { type: Object },
+    groups: { type: Array },
     tokens: [
       {
         token: {
@@ -39,12 +40,11 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.virtual("Task",
-{
+userSchema.virtual("Task", {
   ref: "Room",
   localField: "_id",
-  foreignField: "owner",}
-)
+  foreignField: "owner",
+});
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;

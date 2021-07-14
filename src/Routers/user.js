@@ -28,6 +28,7 @@ router.post("/users", async (req, res) => {
     edit_props: false,
     see_todo: false,
     edit_todo: false,
+  
   };
 
   try {
