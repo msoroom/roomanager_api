@@ -68,13 +68,33 @@ router.get("/all", auth, auditlog, async (req, res) => {
   // }
 });
 
-// gets all tasks for a specific user
-router.get("/all/:room", auth, auditlog, async (req, res) => {});
+// gets mentions tasks for a specific user
+//mode c = created 
+//mode o = owner
+//mode a = adviced
+
+//query options
+// ?sortBy=createdAt:desc||asc
+
+router.get("/all/:room", auth, auditlog, async (req, res) => {
+
+
+
+
+
+});
 
 // updates a task for a specific room
 router.patch("/:room", auth, auditlog, async (req, res) => {});
 
 //delete a task for a specific room
-router.delete("/:room", auth, auditlog, async (req, res) => {});
+router.delete("/:room", auth, auditlog, async (req, res) => {
+
+
+  
+
+
+
+});
 
 module.exports = router;
