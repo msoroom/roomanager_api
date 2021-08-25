@@ -40,10 +40,16 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.virtual("Task", {
-  ref: "Room",
+userSchema.virtual("CTask", {
+  ref: "Task",
   localField: "_id",
-  foreignField: "owner",
+  foreignField: "creator",
+});
+
+userSchema.virtual("RTask", {
+  ref: "Task",
+  localField: "_id",
+  foreignField: "resolver",
 });
 
 userSchema.methods.generateAuthToken = async function () {

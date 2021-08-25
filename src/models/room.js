@@ -35,10 +35,8 @@ const roomSchema = new mongoose.Schema(
     ],
     compartment: {
       type: Number,
-      default: 0
-
-    }
-    
+      default: 0,
+    },
   },
 
   //kein plan
@@ -47,10 +45,9 @@ const roomSchema = new mongoose.Schema(
   }
 );
 
-
-roomSchema.virtual("room", {
-  ref: "Room",
-  localField: "_id",
+roomSchema.virtual("tasks", {
+  ref: "Task",
+  localField: "name",
   foreignField: "owner",
 });
 

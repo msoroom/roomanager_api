@@ -18,7 +18,7 @@ router.post("/:room", auth, auditlog, async (req, res) => {
   const heading = req.body.heading;
   const discription = String(req.body.discription);
   const userid = req.user._id;
-  const room = req.body.room;
+  const room = req.body.room.name;
 
   discription.trim();
 
@@ -28,7 +28,7 @@ router.post("/:room", auth, auditlog, async (req, res) => {
     const task = new Task({
       heading,
       discription,
-      userid,
+      creator: req.user._id,
       room,
     });
 
@@ -39,17 +39,39 @@ router.post("/:room", auth, auditlog, async (req, res) => {
   }
 });
 
-// gets all tasks
+// gets spefic tasks
 //query options
 // ?sortBy=createdAt:desc||asc
-// ? findBy =
-router.get("/all", auth, auditlog, async (req, res) => {
+// ?mode = C = Creator
+//         R = Resover
+//         U = Unify
+//? limit = 10
+// skip = 10
+router.get("/specific/user", auth, auditlog, async (req, res) => {
   const sort = {};
+  req.query;
+
+  const custpath = req.query.mode.toUpperCase() + "Task";
 
   if (req.query.sortBy) {
     const parts = req.query.sortBy.split(":");
 
     sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
+  }
+  try {
+    const a = await req.user
+      .populate({
+        path: custpath,
+        options: {
+          limit: parseInt(req.query.limit),
+          skip: parseInt(req.query.skip),
+          sort,
+        },
+      })
+      .execPopulate();
+  } catch (error) {
+    console.warn(error);
+    res.status(500).send(error);
   }
 
   // try {

@@ -17,14 +17,19 @@ const taskSchema = new mongoose.Schema(
       default: 0,
     },
 
-    user: {
+    resolver: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
+    creator: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
     },
 
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       require: true,
       ref: "Room",
     },
@@ -34,6 +39,12 @@ const taskSchema = new mongoose.Schema(
   }
 );
 
-const Taskmodel = new mongoose.Model("Task", taskSchema);
+taskSchema.virtual("Creator", {
+  ref: "User",
+  localField: "creator",
+  foreignField: "_id",
+});
+
+const Taskmodel = new mongoose.model("Task", taskSchema);
 
 module.exports = Taskmodel;
