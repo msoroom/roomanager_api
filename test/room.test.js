@@ -23,7 +23,7 @@ test("Should create a room", async () => {
   };
 
   const response = await request(app)
-    .post("/rooms")
+    .post("/api/rooms")
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .send({
       name: "abcaaa",
@@ -35,21 +35,21 @@ test("Should create a room", async () => {
 test("Should not create a new room", async () => {
   //cause it exists by name
   let response = await request(app)
-    .post("/rooms")
+    .post("/api/rooms")
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .send({ roomOne })
     .expect(500);
 
   //cause user is not permitted to do this
   response = await request(app)
-    .post("/rooms")
+    .post("/api/rooms")
     .set("Cookie", "auth_token=" + userTwo.tokens[0].token)
     .send()
     .expect(400);
 });
 test("Should get a room as an admin ", async () => {
   var response = await request(app)
-    .get("/rooms/" + roomOne.name)
+    .get("/api/rooms/" + roomOne.name)
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .send()
     .expect(200);
@@ -58,7 +58,7 @@ test("Should get a room as an admin ", async () => {
 });
 test("Should get a room with given perms", async () => {
   var response = await request(app)
-    .get("/rooms/" + roomOne.name)
+    .get("/api/rooms/" + roomOne.name)
     .set("Cookie", "auth_token=" + userTwo.tokens[0].token)
     .send()
     .expect(200);
@@ -66,7 +66,7 @@ test("Should get a room with given perms", async () => {
 
 test("Should not get a room ", async () => {
   var response = await request(app)
-    .get("/rooms/not a room")
+    .get("/api/rooms/not a room")
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .send()
     .expect(400);
@@ -74,7 +74,7 @@ test("Should not get a room ", async () => {
   expect(response.body.name).toBeUndefined();
 });
 
-test("Should update the mentioned room with only the walid params", async () => {
+test("Should update the mentioned room with only the valid params", async () => {
   const updates = {
     name: "neuer name",
     props: {
@@ -90,7 +90,7 @@ test("Should update the mentioned room with only the walid params", async () => 
   //mit admin permissions
 
   const response = await request(app)
-    .patch("/rooms/" + roomOne.name + "/admin")
+    .patch("/api/rooms/" + roomOne.name + "/admin")
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .send({ ...updates })
     .expect(200);
@@ -111,7 +111,7 @@ test("Should update the mentioned room with only the walid params", async () => 
 
   // if the user only has the perms to update a certain prop
   const response2 = await request(app)
-    .patch("/rooms/" + roomOne.name + "/admin")
+    .patch("/api/rooms/" + roomOne.name + "/admin")
     .set("Cookie", "auth_token=" + userTwo.tokens[0].token)
     .send({ ...updates })
     .expect(200);
@@ -126,12 +126,12 @@ test("Should update the mentioned room with only the walid params", async () => 
   expect(room2.name).not.toBe(updates.name);
   expect(room2.props).toEqual(updates.props);
   expect(room2.stupid).toBeUndefined();
-  expect(room2.buckedlist).toBeUndefined();
+  expect(room2.buckedlist).toEqual({});
 });
 
 test("should upload a new picture for a room", async () => {
   const response = await request(app)
-    .post("/rooms/" + roomOne.name + "/admin/pics")
+    .post("/api/rooms/" + roomOne.name + "/admin/pics")
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .attach("pic", "test/fixtures/profile-pic.jpg")
     .expect(200);
@@ -139,7 +139,7 @@ test("should upload a new picture for a room", async () => {
 
 test("should not upload a new picture for a room", async () => {
   const response = await request(app)
-    .post("/rooms/" + roomOne.name + "/admin/pics")
+    .post("/api/rooms/" + roomOne.name + "/admin/pics")
     .set("Cookie", "auth_token=" + userTwo.tokens[0].token)
     .attach("pic", "test/fixtures/profile-pic.jpg")
     .expect(400);
@@ -153,7 +153,6 @@ test("Should delete a picture for a room", async () => {
     _id: roomeOnePicID,
     pic: bu,
   });
-  console.log(roomeOnePicID);
 
   a.pics.push({
     pic: bu,
@@ -162,16 +161,12 @@ test("Should delete a picture for a room", async () => {
   await a.save();
 
   const response = await request(app)
-    .delete("/rooms/" + roomOne.name + "/pic/admin/")
+    .delete("/api/rooms/" + roomOne.name + "/pic/admin/")
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .send([roomeOnePicID])
     .expect(200);
 
   const roooms = await Room.find({});
 
-  console.log(roooms);
-
   const room = await Room.findOne({ _id: roomOne._id });
-
-  console.log("alpha " + room);
 });

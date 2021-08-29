@@ -10,7 +10,6 @@ const userOneId = new mongoose.Types.ObjectId();
 const userOne = {
   _id: userOneId,
   name: "Jonas1",
-  email: "l.jonas@web.de",
   password: "Jojoasdggjo ich bins",
   perms: {
     see_pics: true,
@@ -31,7 +30,6 @@ const userTwoId = new mongoose.Types.ObjectId();
 const userTwo = {
   _id: userTwoId,
   name: "Jonasasdf1",
-  email: "jonasda@web.de",
   password: "Jojoasadsfdggjo ich bins",
   perms: {
     see_pics: true,

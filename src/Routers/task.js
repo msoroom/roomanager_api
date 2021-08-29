@@ -47,7 +47,7 @@ router.post("/:room", auth, auditlog, async (req, res) => {
 //         U = Unify
 //? limit = 10
 // skip = 10
-router.get("/specific/user", auth, auditlog, async (req, res) => {
+router.get("/specific/task", auth, auditlog, async (req, res) => {
   const sort = {};
   req.query;
 
@@ -91,32 +91,19 @@ router.get("/specific/user", auth, auditlog, async (req, res) => {
 });
 
 // gets mentions tasks for a specific user
-//mode c = created 
+//mode c = created
 //mode o = owner
 //mode a = adviced
 
 //query options
 // ?sortBy=createdAt:desc||asc
 
-router.get("/all/:room", auth, auditlog, async (req, res) => {
-
-
-
-
-
-});
+router.get("/all/:room", auth, auditlog, async (req, res) => {});
 
 // updates a task for a specific room
 router.patch("/:room", auth, auditlog, async (req, res) => {});
 
 //delete a task for a specific room
-router.delete("/:room", auth, auditlog, async (req, res) => {
-
-
-  
-
-
-
-});
+router.delete("/:room", auth, auditlog, async (req, res) => {});
 
 module.exports = router;

@@ -8,11 +8,10 @@ beforeEach(setUpDatabase);
 
 test("Should sign up a user", async () => {
   const response = await request(app)
-    .post("/users")
+    .post("/api/users")
     .send({
       name: "Jonas",
-      email: "l.jonahhhs@web.de",
-      password: "Jayjay hat nen kleinen ",
+      token: process.env.TOKEN,
     })
     .expect(201);
   //chesck if user exists
@@ -33,39 +32,19 @@ test("Should sign up a user", async () => {
 test("Should not sign up a user", async () => {
   //user expist
   const response = await request(app)
-    .post("/users")
+    .post("/api/users")
     .send({
-      name: "Jonas",
-      email: "l.jonas@web.de",
-      password: "Jayjay hat nen kleinen ",
-    })
-    .expect(401);
-
-  // no password
-  const response2 = await request(app)
-    .post("/users")
-    .send({
-      name: "Jonas",
-      email: "l.jonas@web.de",
-    })
-    .expect(401);
-
-  // no email
-  const response3 = await request(app)
-    .post("/users")
-    .send({
-      name: "Jonas",
-
-      password: "Jayjay hat nen kleinen ",
+      name: "Jonas1",
+      token: process.env.TOKEN,
     })
     .expect(401);
 });
 
 test("Should sing in existing users", async () => {
   const response = await request(app)
-    .post("/users/login")
+    .post("/api/users/login")
     .send({
-      email: userOne.email,
+      name: userOne.name,
       password: userOne.password,
     })
     .expect(200);
@@ -73,11 +52,11 @@ test("Should sing in existing users", async () => {
 
 test("Should not sing in existing users", async () => {
   //nothing provided
-  await request(app).post("/users/login").send({}).expect(400);
+  await request(app).post("/api/users/login").send({}).expect(400);
 
   // wrong password
   await request(app)
-    .post("/users/login")
+    .post("/api/users/login")
     .send({
       email: userOne.email,
       password: "wrong password",
@@ -85,7 +64,7 @@ test("Should not sing in existing users", async () => {
     .expect(400);
   //wrong email
   await request(app)
-    .post("/users/login")
+    .post("/api/users/login")
     .send({
       email: "wrong email",
       password: userOne.password,
@@ -94,7 +73,7 @@ test("Should not sing in existing users", async () => {
 });
 test("Should log out user", async () => {
   const response = await request(app)
-    .post("/users/logout")
+    .post("/api/users/logout")
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .send({})
     .expect(200);
@@ -104,7 +83,7 @@ test("Should log out user", async () => {
 
 test("Should delete user", async () => {
   const response = await request(app)
-    .delete("/users/me")
+    .delete("/api/users/me")
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .expect(200);
 
@@ -114,7 +93,7 @@ test("Should delete user", async () => {
 
 test("Should get the permissions of an user", async () => {
   const response = await request(app)
-    .get("/users/me/auth")
+    .get("/api/users/me/auth")
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .send()
     .expect(200);

@@ -17,7 +17,7 @@ router.post("/users", async (req, res) => {
 
   if (req.body.token !== process.env.TOKEN) {
     console.log(user.token);
-    return res.send({ error: "Invalid Token" });
+    return res.status(404).send({ error: "Invalid Token" });
   }
 
   user.perms = {
@@ -28,7 +28,6 @@ router.post("/users", async (req, res) => {
     edit_props: false,
     see_todo: false,
     edit_todo: false,
-  
   };
 
   try {
@@ -43,10 +42,7 @@ router.post("/users", async (req, res) => {
 
 router.post("/users/login", async (req, res) => {
   try {
-    const user = await User.findByCredentials(
-      req.body.name,
-      req.body.password
-    );
+    const user = await User.findByCredentials(req.body.name, req.body.password);
     const token = await user.generateAuthToken();
 
     res.cookie("auth_token", token);
