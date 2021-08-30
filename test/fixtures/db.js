@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const User = require("../../src/models/user");
 const Room = require("../../src/models/room");
+const Task = require("../../src/models/task");
+
 const fs = require("fs");
 const path = require("path");
 
@@ -88,6 +90,18 @@ const roomTwo = {
   },
   buckedlist: {},
 };
+const taskOneId = new mongoose.Types.ObjectId();
+const taskOne = {
+
+  heading: "Lore ipsum" ,
+  discription: "Lore ipsum in Computer ",
+  resolver: userOne._id,
+  creator : userTwoId,
+  owner: roomOne.name,
+
+}
+
+
 
 const setUpDatabase = async () => {
   //User setUpDatabasew
