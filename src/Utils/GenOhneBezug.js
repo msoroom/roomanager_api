@@ -4,8 +4,14 @@ const qr = require("qrcode");
 const { PassThrough } = require("stream");
 const sharp = require("sharp");
 
-const names = fs.readFileSync("./src/Utils/fruits.txt").toString().split("\n");
-const colors = fs.readFileSync("./src/Utils/colors.txt").toString().split("\n");
+const names = fs
+  .readFileSync("./src/Utils/pwd_gen/fruits.txt")
+  .toString()
+  .split("\n");
+const colors = fs
+  .readFileSync("./src/Utils/pwd_gen/colors.txt")
+  .toString()
+  .split("\n");
 
 module.exports.genPassword = () => {
   var p1 = names[randomInt(names.length - 1)];
