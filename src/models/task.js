@@ -45,6 +45,6 @@ taskSchema.virtual("Creator", {
   foreignField: "_id",
 });
 
-const Taskmodel = new mongoose.model("Task", taskSchema);
+const Task = mongoose.model("Task", taskSchema);
 
-module.exports = Taskmodel;
+module.exports = Task;

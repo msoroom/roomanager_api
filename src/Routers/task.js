@@ -1,7 +1,7 @@
 const express = require("express");
 const auth = require("../middleware/auth");
 const Room = require("../models/room");
-const Task = require("../models/tasks");
+const Task = require("../models/task");
 
 const auditlog = require("../middleware/auditlog");
 
@@ -18,11 +18,11 @@ router.post("/:room", auth, auditlog, async (req, res) => {
   const heading = req.body.heading;
   const discription = String(req.body.discription);
   const userid = req.user._id;
-  const room = req.body.room.name;
+  const room = req.params.room;
 
   discription.trim();
 
-  if (!discription.includes(/\w/gim)) discription = undefined;
+  if (!discription.match(/\w/gim)) discription = undefined;
 
   try {
     const task = new Task({
@@ -33,7 +33,7 @@ router.post("/:room", auth, auditlog, async (req, res) => {
     });
 
     const task2 = await task.save();
-    res.status(200).send(task2);
+    res.status(201).send(task2);
   } catch (e) {
     res.status(500).send();
   }
@@ -98,12 +98,12 @@ router.get("/specific/task", auth, auditlog, async (req, res) => {
 //query options
 // ?sortBy=createdAt:desc||asc
 
-router.get("/all/:room", auth, auditlog, async (req, res) => {});
+router.get("/all/:room", auth, auditlog, async (req, res) => { });
 
 // updates a task for a specific room
-router.patch("/:room", auth, auditlog, async (req, res) => {});
+router.patch("/:room", auth, auditlog, async (req, res) => { });
 
 //delete a task for a specific room
-router.delete("/:room", auth, auditlog, async (req, res) => {});
+router.delete("/:room", auth, auditlog, async (req, res) => { });
 
 module.exports = router;
