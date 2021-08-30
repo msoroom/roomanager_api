@@ -35,7 +35,7 @@ router.post("/:room", auth, auditlog, async (req, res) => {
     const task2 = await task.save();
     res.status(201).send(task2);
   } catch (e) {
-    res.status(500).send();
+    res.status(400).send();
   }
 });
 
@@ -98,12 +98,12 @@ router.get("/specific/task", auth, auditlog, async (req, res) => {
 //query options
 // ?sortBy=createdAt:desc||asc
 
-router.get("/all/:room", auth, auditlog, async (req, res) => { });
+router.get("/all/:room", auth, auditlog, async (req, res) => {});
 
 // updates a task for a specific room
-router.patch("/:room", auth, auditlog, async (req, res) => { });
+router.patch("/:room", auth, auditlog, async (req, res) => {});
 
 //delete a task for a specific room
-router.delete("/:room", auth, auditlog, async (req, res) => { });
+router.delete("/:room", auth, auditlog, async (req, res) => {});
 
 module.exports = router;

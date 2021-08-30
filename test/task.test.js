@@ -35,3 +35,13 @@ test("should create a task", async () => {
   console.log(task);
   expect(ria.heading).toBe(task.heading);
 });
+
+test("should not create a tesk", async () => {
+  const testtask = {};
+
+  const response = await request(app)
+    .post("/api/tasks/" + roomOne.name)
+    .set("Cookie", "auth_token=" + userOne.tokens[0].token)
+    .send(testtask)
+    .expect(400);
+});
