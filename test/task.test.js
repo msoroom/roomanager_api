@@ -36,7 +36,7 @@ test("should create a task", async () => {
   expect(ria.heading).toBe(task.heading);
 });
 
-test("should not create a tesk", async () => {
+test("should not create a task", async () => {
   const testtask = {};
 
   const response = await request(app)
@@ -44,9 +44,6 @@ test("should not create a tesk", async () => {
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .send(testtask)
     .expect(400);
-
-    const response = await request(app).post("/api/tasks/" + roomOne.name)
-    .set("Cookie", "auth_token=" + userTwo.tokens[0].token)
-    .send(testtask)
-    .expect(400);
 });
+
+test("should edit a task", () => {});
