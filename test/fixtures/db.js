@@ -92,21 +92,18 @@ const roomTwo = {
 };
 const taskOneId = new mongoose.Types.ObjectId();
 const taskOne = {
-
-  heading: "Lore ipsum" ,
+  heading: "Lore ipsum",
   discription: "Lore ipsum in Computer ",
   resolver: userOne._id,
-  creator : userTwoId,
+  creator: userTwoId,
   owner: roomOne.name,
-
-}
-
-
+};
 
 const setUpDatabase = async () => {
   //User setUpDatabasew
   await User.deleteMany();
   await Room.deleteMany();
+  await Task.deleteMany();
 
   await new User(userOne).save();
   await new User(userTwo).save();
@@ -115,6 +112,8 @@ const setUpDatabase = async () => {
 
   await new Room(roomOne).save();
   await new Room(roomTwo).save();
+
+  await new Task(taskOne).save();
 };
 
 module.exports = {
@@ -127,6 +126,7 @@ module.exports = {
   roomOne,
   roomeOnePicID,
   roomTwo,
+  taskOne,
 
   setUpDatabase,
 };

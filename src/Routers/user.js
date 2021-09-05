@@ -21,13 +21,16 @@ router.post("/users", async (req, res) => {
   }
 
   user.perms = {
-    see_pics: true,
     admin: false,
+    see_pics: true,
     see_props: false,
     edit_pics: false,
     edit_props: false,
     see_todo: false,
     edit_todo: false,
+    see_tasks: false,
+    edit_tasks: false,
+    create_tasks: false,
   };
 
   try {

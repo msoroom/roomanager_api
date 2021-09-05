@@ -27,6 +27,9 @@ test("Should sign up a user", async () => {
     edit_props: false,
     see_todo: false,
     edit_todo: false,
+    see_tasks: false,
+    edit_tasks: false,
+    create_tasks: false,
   });
 });
 test("Should not sign up a user", async () => {
