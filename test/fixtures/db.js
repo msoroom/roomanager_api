@@ -92,6 +92,7 @@ const roomTwo = {
 };
 const taskOneId = new mongoose.Types.ObjectId();
 const taskOne = {
+  _id: taskOneId,
   heading: "Lore ipsum",
   discription: "Lore ipsum in Computer ",
   resolver: userOne._id,
