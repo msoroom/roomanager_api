@@ -9,6 +9,7 @@ const {
   roomOne,
   roomTwo,
   roomeOnePicID,
+  taskOne,
 
   setUpDatabase,
 } = require("./fixtures/db");
@@ -32,7 +33,6 @@ test("should create a task", async () => {
 
   const task = await Task.findOne({ _id: id });
 
-  console.log(task);
   expect(ria.heading).toBe(task.heading);
 });
 
@@ -46,4 +46,42 @@ test("should not create a task", async () => {
     .expect(400);
 });
 
-test("should edit a task", () => {});
+test("should find a tasks where the user is the resolver", async () => {
+  const response = await request(app)
+    .get("/api/tasks/related?sortBy=desc&mode=r&limit=10")
+    .set("Cookie", "auth_token=" + userOne.tokens[0].token)
+    .send()
+    .expect(200);
+
+  expect(response.body._id).toEqual(taskOne._id);
+});
+
+test("should find a tasks where the user is the Creator", async () => {
+  const response = await request(app)
+    .get("/api/tasks/related?sortBy=desc&mode=c&limit=10")
+    .set("Cookie", "auth_token=" + userTwo.tokens[0].token)
+    .send()
+    .expect(200);
+
+  expect(response.body._id).toEqual(taskOne._id);
+});
+
+test("should not find a tasks where the user is the resolver", async () => {
+  const response = await request(app)
+    .get("/api/tasks/related?sortBy=desc&mode=r&limit=10")
+    .set("Cookie", "auth_token=" + userTwo.tokens[0].token)
+    .send()
+    .expect(200);
+
+  expect(response.body).toEqual([]);
+});
+
+test("should not find a tasks where the user is the Creator", async () => {
+  const response = await request(app)
+    .get("/api/tasks/related?sortBy=desc&mode=c&limit=10")
+    .set("Cookie", "auth_token=" + userOne.tokens[0].token)
+    .send()
+    .expect(200);
+
+  expect(response.body).toEqual([]);
+});

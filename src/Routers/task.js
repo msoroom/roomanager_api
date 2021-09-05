@@ -47,11 +47,11 @@ router.post("/:room", auth, auditlog, async (req, res) => {
 //         U = Unify
 //? limit = 10
 // skip = 10
-router.get("/specific/task", auth, auditlog, async (req, res) => {
+router.get("/related", auth, auditlog, async (req, res) => {
   const sort = {};
   req.query;
 
-  const custpath = req.query.mode.toUpperCase() + "Task";
+  const custpath = String(req.query.mode.toUpperCase() + "Task");
 
   if (req.query.sortBy) {
     const parts = req.query.sortBy.split(":");
@@ -59,7 +59,7 @@ router.get("/specific/task", auth, auditlog, async (req, res) => {
     sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
   }
   try {
-    const a = await req.user
+    await req.user
       .populate({
         path: custpath,
         options: {
@@ -69,25 +69,12 @@ router.get("/specific/task", auth, auditlog, async (req, res) => {
         },
       })
       .execPopulate();
+
+    res.status(200).send(req.user[custpath]);
   } catch (error) {
     console.warn(error);
     res.status(500).send(error);
   }
-
-  // try {
-  //   await req.user
-  //     .populate({
-  //       path: "runs",
-  //       options: {
-  //         limit: parseInt(req.query.limit),
-  //         skip: parseInt(req.query.skip),
-  //         sort,
-  //       },
-  //     })
-  //     .execPopulate();
-  // } catch (e) {
-
-  // }
 });
 
 // gets mentions tasks for a specific user
