@@ -21,6 +21,9 @@ const userOne = {
     edit_props: false,
     see_todo: false,
     edit_todo: false,
+    create_tasks: false,
+    edit_tasks: false,
+    see_tasks: false,
   },
   tokens: [
     {
@@ -41,6 +44,9 @@ const userTwo = {
     edit_props: true,
     see_todo: false,
     edit_todo: false,
+    create_tasks: false,
+    edit_tasks: false,
+    see_tasks: false,
   },
   tokens: [
     {

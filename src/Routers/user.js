@@ -14,24 +14,11 @@ router.post("/users", async (req, res) => {
   const pwd = ppp.genPassword();
 
   user.password = pwd;
-
+  delete user.perms;
   if (req.body.token !== process.env.TOKEN) {
     console.log(user.token);
     return res.status(404).send({ error: "Invalid Token" });
   }
-
-  user.perms = {
-    admin: false,
-    see_pics: true,
-    see_props: false,
-    edit_pics: false,
-    edit_props: false,
-    see_todo: false,
-    edit_todo: false,
-    see_tasks: false,
-    edit_tasks: false,
-    create_tasks: false,
-  };
 
   try {
     await user.save();
@@ -39,6 +26,7 @@ router.post("/users", async (req, res) => {
     res.cookie("auth_token", token);
     res.status(201).send({ user, pwd, token });
   } catch (e) {
+    console.log(e);
     res.status(401).send(e);
   }
 });
@@ -147,7 +135,7 @@ router.delete("/users/me", auth, auditlog, async (req, res) => {
 });
 // gets the permissions for an user
 router.get("/users/me/auth", auth, auditlog, async (req, res) => {
-  res.send({ ...req.user.perms });
+  res.send(req.user.perms);
 });
 // updates a user
 router.patch("/users/:id", auth, auditlog, async (req, res) => {
@@ -174,15 +162,6 @@ router.patch("/users/update/admin", auth, auditlog, async (req, res) => {
   if (!req.user.perms.admin)
     return res.status(400).send({ error: "You are not permitted to do this." });
 
-  const validUpdates = [
-    "see_pics",
-    "admin",
-    "see_props",
-    "edit_pics",
-    "edit_props",
-    "see_todo",
-    "edit_todo",
-  ];
   try {
     const a = await req.body.map(async (key) => {
       key.perms = Object.fromEntries(

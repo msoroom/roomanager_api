@@ -3,6 +3,8 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const permissions = require("./Schemas/permissonSchema");
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -22,7 +24,23 @@ const userSchema = new mongoose.Schema(
         }
       },
     },
-    perms: { type: Object },
+    perms: {
+      type: permissions,
+      default: {
+        see_pics: true,
+        admin: false,
+        see_props: false,
+        edit_pics: false,
+        edit_props: false,
+        see_todo: false,
+        edit_todo: false,
+        create_tasks: false,
+        edit_tasks: false,
+        see_tasks: false,
+      },
+      required: true,
+    },
+
     groups: { type: Array },
     tokens: [
       {
@@ -38,6 +56,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: true,
   }
 );
 
@@ -51,6 +70,12 @@ userSchema.virtual("RTask", {
   ref: "Task",
   localField: "_id",
   foreignField: "resolver",
+});
+
+userSchema.virtual("Groups", {
+  ref: "Group",
+  localField: "groups",
+  foreignField: "members",
 });
 
 userSchema.methods.generateAuthToken = async function () {

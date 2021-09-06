@@ -1,3 +1,6 @@
+const mongoose = require("mongoose");
+const permissions = require("./Schemas/permissonSchema");
+
 const groupSchema = new mongoose.Schema(
   {
     name: {
@@ -7,7 +10,7 @@ const groupSchema = new mongoose.Schema(
       unique: true,
     },
     permissions: {
-      type: Object,
+      type: permissions,
       required: true,
     },
 
@@ -15,18 +18,11 @@ const groupSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
+    members: {
+      type: [mongoose.Schema.Types.ObjectId],
+    },
   },
   { timestamps: true }
 );
 
-groupSchema.methods.toJSON = function () {
-  const pre = this.permissions;
-
-  var build = {};
-
-  const prod = Object.keys(pre).forEach((key) => {
-    build[key] = pre[key] === 1 ? true : false;
-  });
-
-  return prod;
-};
+const model = mongoose.model("Group", groupSchema);
