@@ -54,7 +54,7 @@ const Permission = new mongoose.Schema(
     },
   },
 
-  { strict: true }
+  { strict: true, toJSON: true }
 );
 
 Permission.methods.toJSON = function () {

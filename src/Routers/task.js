@@ -40,6 +40,12 @@ router.post("/:room", auth, auditlog, async (req, res) => {
   }
 });
 
+//get all tasks
+
+// req.body filter by any propety
+
+router.get("/all", auth, auditlog, async (req, res) => {});
+
 // gets spefic tasks
 //query options
 // ?sortBy=createdAt:desc||asc
@@ -84,14 +90,6 @@ router.get("/related", auth, auditlog, async (req, res) => {
     res.status(500).send(error);
   }
 });
-
-// gets mentions tasks for a specific user
-//mode c = created
-//mode o = owner
-//mode a = adviced
-
-//query options
-// ?sortBy=createdAt:desc||asc
 
 router.get("/all/:room", auth, auditlog, async (req, res) => {});
 

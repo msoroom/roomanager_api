@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
-    groups: { type: Array },
+    groups: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
     tokens: [
       {
         token: {
