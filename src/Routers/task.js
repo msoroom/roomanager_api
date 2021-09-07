@@ -52,8 +52,7 @@ router.post("/:room", auth, auditlog, async (req, res) => {
 router.get("/related", auth, auditlog, async (req, res) => {
   const sort = {};
 
-  const match =
-    req.query.match !== undefined ? { heading: req.query.match } : undefined;
+  const match = req.body !== undefined ? req.body : undefined;
 
   const path =
     req.query.path === undefined
