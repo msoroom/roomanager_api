@@ -6,6 +6,7 @@ require("./db/mongoose");
 const userRouter = require("./Routers/user");
 const roomRouter = require("./Routers/room");
 const taskRouter = require("./Routers/task");
+const groupsRouter = require("./Routers/groups");
 
 const auditlog = require("./Utils/autditlog");
 
@@ -25,7 +26,8 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api", userRouter);
 app.use("/api/rooms", roomRouter);
-app.use("/api/tasks",taskRouter)
+app.use("/api/tasks", taskRouter);
+app.user("/api/groups", groupsRouter);
 
 process.env.file = path.join(
   __dirname,

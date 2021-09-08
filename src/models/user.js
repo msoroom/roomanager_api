@@ -75,7 +75,7 @@ userSchema.virtual("RTask", {
 userSchema.virtual("Groups", {
   ref: "Group",
   localField: "groups",
-  foreignField: "members",
+  foreignField: "_id",
 });
 
 userSchema.methods.generateAuthToken = async function () {
@@ -99,6 +99,21 @@ userSchema.methods.toJSON = function () {
   delete userObjekt.tokens;
   delete userObjekt.avatar;
   return userObjekt;
+};
+
+userSchema.methods.toPermissons = async function () {
+  await this.populate({
+    path: "Groups",
+  });
+
+  const perms = this.perms.toJSON();
+
+  this.Groups.forEach((element) => {
+    Object.key(element.perms).forEach((key) => {
+      perms[key] = element.perms[key] || perms[key];
+    });
+  });
+  return perms;
 };
 
 userSchema.statics.findByCredentials = async (name, password) => {

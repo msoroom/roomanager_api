@@ -19,10 +19,16 @@ const groupSchema = new mongoose.Schema(
       required: true,
     },
     members: {
-      type: [mongoose.Schema.Types.ObjectId],
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     },
   },
   { timestamps: true }
 );
+
+groupSchema.virtual("Members", {
+  ref: "User",
+  localField: members.name,
+  foreignField: "_id",
+});
 
 const model = mongoose.model("Group", groupSchema);
