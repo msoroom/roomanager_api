@@ -101,7 +101,7 @@ router.post("/users/logoutAll", auth, async (req, res) => {
 //? skip=1 => page
 //http://localhost:3001/users/all/admin?skip=0&limit=1&name=Jonas%20Liebegott
 router.get("/users/all/admin", auth, auditlog, async (req, res) => {
-  if (!req.user.perms.admin)
+  if (user.n)
     return res.status(400).send({ error: "You are not permitted to do this." });
   const name = req.query.name !== undefined ? { name: req.query.name } : {};
 

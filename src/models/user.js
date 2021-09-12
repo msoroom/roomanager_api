@@ -24,24 +24,11 @@ const userSchema = new mongoose.Schema(
         }
       },
     },
-    perms: {
-      type: permissions,
-      default: {
-        see_pics: true,
-        admin: false,
-        see_props: false,
-        edit_pics: false,
-        edit_props: false,
-        see_todo: false,
-        edit_todo: false,
-        create_tasks: false,
-        edit_tasks: false,
-        see_tasks: false,
-      },
-      required: true,
+    role: {
+      type: String,
+      default: "visitor",
+      enum: ["admin", "tafelritter", "visitor"],
     },
-
-    groups: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
     tokens: [
       {
         token: {
@@ -70,12 +57,6 @@ userSchema.virtual("RTask", {
   ref: "Task",
   localField: "_id",
   foreignField: "resolver",
-});
-
-userSchema.virtual("Groups", {
-  ref: "Group",
-  localField: "groups",
-  foreignField: "_id",
 });
 
 userSchema.methods.generateAuthToken = async function () {

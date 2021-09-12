@@ -16,6 +16,10 @@ const taskSchema = new mongoose.Schema(
       required: true,
       default: 0,
     },
+    resolved: {
+      type: Boolean,
+      default: false,
+    },
 
     resolver: {
       type: mongoose.Schema.Types.ObjectId,

@@ -1,0 +1,88 @@
+const { AbilityBuilder, Ability } = require("@casl/ability");
+
+let ANONYMOUS_ABILITY;
+
+function defineAbilityFor(user) {
+  if (user) {
+    return new Ability(defineRulesFor(user));
+  }
+
+  ANONYMOUS_ABILITY = ANONYMOUS_ABILITY || new Ability(defineRulesFor({}));
+  return ANONYMOUS_ABILITY;
+}
+
+function defineRulesFor(user) {
+  const builder = new AbilityBuilder(Ability);
+
+  switch (user.role) {
+    case "admin":
+      define_Admin_Rules(builder, user);
+      break;
+    case "tafelritter":
+      define_Anonymous_Rules(builder);
+      define_Tafelritter_Rules
+      define_Basic_Rules(builder,user)
+      break;
+    case "teacher": 
+      define_Teacher_Rules(builder, user)
+      define_Anonymous_Rules(builder)
+      break;
+    case "visitor":
+        define_Basic_Rules(builder,user);
+        define_Anonymous_Rules
+        break;
+    default:
+      define_Anonymous_Rules(builder, user);
+      break;
+  }
+
+  return builder.rules;
+}
+
+function define_Admin_Rules({ can }) {
+  can("manage", "all");
+}
+
+function define_Tafelritter_Rules({ can, cannot } , user) {
+
+    can(["read", "write", "update"],["Rooms"])
+    can(["read", "create"],["Tasks"])
+    can(["update"],["Tasks"], { resolved : false })
+    cannot(["manage"],["Users"]).because("You are not Allowed to see Users.")
+
+}
+
+function define_Teacher_Rules({can, cannot}, user) {
+
+    can(["read","create"],["Tasks"],{creator: user._id})
+    
+}
+
+
+
+// function defineWriterRules({ can }, user) {
+//   can(["read", "create", "delete", "update"], ["Article", "Comment"], {
+//     author: user._id,
+//   });
+//   can("publish", "Article", {
+//     author: user._id,
+//     published: false,
+//   });
+//   can(["read", "update"], "User", { _id: user._id });
+// }
+
+function define_Basic_Rules({can},user) {
+    
+    can("update", "User", ["name", "password","avatar",]{_id: user._id})
+
+
+}
+
+function define_Anonymous_Rules({ can }) {
+  can("read","Rooms");
+}
+
+module.exports = {
+  defineRulesFor,
+  defineAbilityFor,
+};
