@@ -20,17 +20,17 @@ function defineRulesFor(user) {
       break;
     case "tafelritter":
       define_Anonymous_Rules(builder);
-      define_Tafelritter_Rules
-      define_Basic_Rules(builder,user)
+      define_Tafelritter_Rules;
+      define_Basic_Rules(builder, user);
       break;
-    case "teacher": 
-      define_Teacher_Rules(builder, user)
-      define_Anonymous_Rules(builder)
+    case "teacher":
+      define_Teacher_Rules(builder, user);
+      define_Anonymous_Rules(builder);
       break;
     case "visitor":
-        define_Basic_Rules(builder,user);
-        define_Anonymous_Rules
-        break;
+      define_Basic_Rules(builder, user);
+      define_Anonymous_Rules(builder, user);
+      break;
     default:
       define_Anonymous_Rules(builder, user);
       break;
@@ -43,43 +43,23 @@ function define_Admin_Rules({ can }) {
   can("manage", "all");
 }
 
-function define_Tafelritter_Rules({ can, cannot } , user) {
-
-    can(["read", "write", "update"],["Rooms"])
-    can(["read", "create"],["Tasks"])
-    can(["update"],["Tasks"], { resolved : false })
-    cannot(["manage"],["Users"]).because("You are not Allowed to see Users.")
-
+function define_Tafelritter_Rules({ can, cannot }, _user) {
+  can(["read", "write", "update"], ["Rooms"]);
+  can(["read", "create"], ["Tasks"]);
+  can(["update"], ["Tasks"], { resolved: false });
+  cannot(["manage"], ["Users"]).because("You are not Allowed to see Users.");
 }
 
-function define_Teacher_Rules({can, cannot}, user) {
-
-    can(["read","create"],["Tasks"],{creator: user._id})
-    
+function define_Teacher_Rules({ can }, user) {
+  can(["read", "create"], ["Tasks"], { creator: user._id });
 }
 
-
-
-// function defineWriterRules({ can }, user) {
-//   can(["read", "create", "delete", "update"], ["Article", "Comment"], {
-//     author: user._id,
-//   });
-//   can("publish", "Article", {
-//     author: user._id,
-//     published: false,
-//   });
-//   can(["read", "update"], "User", { _id: user._id });
-// }
-
-function define_Basic_Rules({can},user) {
-    
-    can("update", "User", ["name", "password","avatar",]{_id: user._id})
-
-
+function define_Basic_Rules({ can }, user) {
+  can("update", "User", ["name", "password", "avatar"], { _id: user._id });
 }
 
 function define_Anonymous_Rules({ can }) {
-  can("read","Rooms");
+  can("read", "Rooms");
 }
 
 module.exports = {

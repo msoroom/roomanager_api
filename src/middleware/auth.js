@@ -17,6 +17,7 @@ const auth = async (req, res, next) => {
 
     req.token = token;
     req.user = user;
+    req.user.abb = abb.defineAbilityFor(req.user);
 
     next();
   } catch (e) {
