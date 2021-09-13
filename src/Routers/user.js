@@ -101,7 +101,7 @@ router.post("/users/logoutAll", auth, async (req, res) => {
 //? skip=1 => page
 //http://localhost:3001/users/all/admin?skip=0&limit=1&name=Jonas%20Liebegott
 router.get("/users/all/admin", auth, auditlog, async (req, res) => {
-  if (user.n)
+  if (req.user.abb.can("manage", "Users"))
     return res.status(400).send({ error: "You are not permitted to do this." });
   const name = req.query.name !== undefined ? { name: req.query.name } : {};
 
@@ -139,7 +139,7 @@ router.get("/users/me/auth", auth, auditlog, async (req, res) => {
 });
 // updates a user
 router.patch("/users/:id", auth, auditlog, async (req, res) => {
-  if (!req.user.perms.admin)
+  if (!req.user.abb.cannot("manage", "Users"))
     return res.status(400).send({ error: "You are not permitted to do this." });
 
   try {
@@ -159,7 +159,7 @@ router.patch("/users/:id", auth, auditlog, async (req, res) => {
 });
 
 router.patch("/users/update/admin", auth, auditlog, async (req, res) => {
-  if (!req.user.perms.admin)
+  if (!req.user.abb.can("manage", "Users"))
     return res.status(400).send({ error: "You are not permitted to do this." });
 
   try {
