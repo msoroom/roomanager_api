@@ -15,6 +15,8 @@ router.post("/users", async (req, res) => {
 
   user.password = pwd;
   delete user.perms;
+  user.role = "visitor";
+
   if (req.body.token !== process.env.TOKEN) {
     console.log(user.token);
     return res.status(404).send({ error: "Invalid Token" });

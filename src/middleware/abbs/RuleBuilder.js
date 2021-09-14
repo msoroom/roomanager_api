@@ -39,8 +39,9 @@ function defineRulesFor(user) {
   return builder.rules;
 }
 
-function define_Admin_Rules({ can }) {
+function define_Admin_Rules({ can, cannot }) {
   can("manage", "all");
+  cannot("update", "Users", ["passwort"]);
 }
 
 function define_Tafelritter_Rules({ can, cannot }, _user) {
