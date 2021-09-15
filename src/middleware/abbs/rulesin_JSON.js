@@ -26,9 +26,16 @@ const tafelritter = [
 
 const teacher = [
   {
-    action: ["read", "create"],
+    action: ["read"],
     subject: ["Tasks"],
     condition: { creator: user._id },
   },
-  
+  {
+    action: ["create"],
+    subject: ["tasks"],
+  },
+  {
+    action: ["read"],
+    subject: ["Rooms"],
+  },
 ];
