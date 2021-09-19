@@ -2,6 +2,7 @@ const express = require("express");
 const auth = require("../middleware/auth");
 const Room = require("../models/room");
 const Task = require("../models/task");
+const User = require("../models/user");
 
 const auditlog = require("../middleware/auditlog");
 
@@ -39,19 +40,30 @@ router.post("/:room", auth, auditlog, async (req, res) => {
   }
 });
 
+//get all tasks
+
+// req.body filter by any propety
+
+router.get("/all", auth, auditlog, async (req, res) => {});
+
 // gets spefic tasks
 //query options
 // ?sortBy=createdAt:desc||asc
 // ?mode = C = Creator
 //         R = Resover
-//         U = Unify
+// ?match = name of task
+
 //? limit = 10
 // skip = 10
 router.get("/related", auth, auditlog, async (req, res) => {
   const sort = {};
-  req.query;
 
-  const custpath = String(req.query.mode.toUpperCase() + "Task");
+  const match = req.body !== undefined ? req.body : undefined;
+
+  const path =
+    req.query.path === undefined
+      ? String(req.query.mode.toUpperCase() + "Task")
+      : undifined;
 
   if (req.query.sortBy) {
     const parts = req.query.sortBy.split(":");
@@ -61,7 +73,8 @@ router.get("/related", auth, auditlog, async (req, res) => {
   try {
     await req.user
       .populate({
-        path: custpath,
+        path,
+        match,
         options: {
           limit: parseInt(req.query.limit),
           skip: parseInt(req.query.skip),
@@ -69,21 +82,14 @@ router.get("/related", auth, auditlog, async (req, res) => {
         },
       })
       .execPopulate();
+    // console.log("Match:" + match + "\n" + req.user[path]);
 
-    res.status(200).send(req.user[custpath]);
+    res.status(200).send(req.user[path]);
   } catch (error) {
     console.warn(error);
     res.status(500).send(error);
   }
 });
-
-// gets mentions tasks for a specific user
-//mode c = created
-//mode o = owner
-//mode a = adviced
-
-//query options
-// ?sortBy=createdAt:desc||asc
 
 router.get("/all/:room", auth, auditlog, async (req, res) => {});
 

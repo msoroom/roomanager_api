@@ -12,7 +12,7 @@ const router = new express.Router();
 
 const upload = multer({
   limits: {
-    fieldSize: 10000000,
+    fieldSize: 5000000,
   },
   fileFilter(req, file, cb) {
     if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
@@ -26,7 +26,7 @@ const upload = multer({
 //router routes
 router.post("/", auth, auditlog, async (req, res) => {
   try {
-    if (!req.user.perms.admin) {
+    if (!req.user.abb.can("create", "room")) {
       return res
         .status(400)
         .send({ error: "You are not permitted to do this" });

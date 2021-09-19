@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const { defineAbilityFor } = require("./abbs/RuleBuilder");
 
 const auth = async (req, res, next) => {
   try {
@@ -16,9 +17,11 @@ const auth = async (req, res, next) => {
 
     req.token = token;
     req.user = user;
-
+    req.user.abb = defineAbilityFor(req.user);
+    console.log(req.user.abb.can("read", user, "name"));
     next();
   } catch (e) {
+    console.log(e);
     res.status(404).send();
   }
 };

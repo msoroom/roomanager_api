@@ -17,20 +17,6 @@ test("Should sign up a user", async () => {
   //chesck if user exists
   const user = await User.findById({ _id: response.body.user._id });
   expect(user).not.toBeNull();
-
-  //check if user is authstufe 1
-  expect(user.perms).toEqual({
-    see_pics: true,
-    admin: false,
-    see_props: false,
-    edit_pics: false,
-    edit_props: false,
-    see_todo: false,
-    edit_todo: false,
-    see_tasks: false,
-    edit_tasks: false,
-    create_tasks: false,
-  });
 });
 test("Should not sign up a user", async () => {
   //user expist

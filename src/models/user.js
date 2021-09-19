@@ -3,6 +3,8 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const permissions = require("./Schemas/permissonSchema");
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -22,8 +24,11 @@ const userSchema = new mongoose.Schema(
         }
       },
     },
-    perms: { type: Object },
-    groups: { type: Array },
+    role: {
+      type: String,
+      default: "visitor",
+      enum: ["admin", "tafelritter", "visitor", "teacher"],
+    },
     tokens: [
       {
         token: {
@@ -38,6 +43,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: true,
   }
 );
 
@@ -74,6 +80,21 @@ userSchema.methods.toJSON = function () {
   delete userObjekt.tokens;
   delete userObjekt.avatar;
   return userObjekt;
+};
+
+userSchema.methods.toPermissons = async function () {
+  await this.populate({
+    path: "Groups",
+  });
+
+  const perms = this.perms.toJSON();
+
+  this.Groups.forEach((element) => {
+    Object.key(element.perms).forEach((key) => {
+      perms[key] = element.perms[key] || perms[key];
+    });
+  });
+  return perms;
 };
 
 userSchema.statics.findByCredentials = async (name, password) => {

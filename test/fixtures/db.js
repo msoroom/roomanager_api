@@ -13,15 +13,7 @@ const userOne = {
   _id: userOneId,
   name: "Jonas1",
   password: "Jojoasdggjo ich bins",
-  perms: {
-    see_pics: true,
-    admin: true,
-    see_props: false,
-    edit_pics: false,
-    edit_props: false,
-    see_todo: false,
-    edit_todo: false,
-  },
+  role: "visitor",
   tokens: [
     {
       token: jwt.sign({ _id: userOneId }, process.env.JWT_SECRET),
@@ -33,15 +25,7 @@ const userTwo = {
   _id: userTwoId,
   name: "Jonasasdf1",
   password: "Jojoasadsfdggjo ich bins",
-  perms: {
-    see_pics: true,
-    admin: false,
-    see_props: false,
-    edit_pics: false,
-    edit_props: true,
-    see_todo: false,
-    edit_todo: false,
-  },
+  role: "visitor",
   tokens: [
     {
       token: jwt.sign({ _id: userTwoId }, process.env.JWT_SECRET),
@@ -92,6 +76,7 @@ const roomTwo = {
 };
 const taskOneId = new mongoose.Types.ObjectId();
 const taskOne = {
+  _id: taskOneId,
   heading: "Lore ipsum",
   discription: "Lore ipsum in Computer ",
   resolver: userOne._id,
