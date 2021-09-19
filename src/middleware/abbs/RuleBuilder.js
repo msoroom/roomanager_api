@@ -1,3 +1,10 @@
+const {
+  adminperms,
+  tafelritterperms,
+  visitorperms,
+  anonymperms,
+} = require("./rulesin_JSON");
+
 const { AbilityBuilder, Ability } = require("@casl/ability");
 
 let ANONYMOUS_ABILITY;
@@ -7,60 +14,31 @@ function defineAbilityFor(user) {
     return new Ability(defineRulesFor(user));
   }
 
-  ANONYMOUS_ABILITY = ANONYMOUS_ABILITY || new Ability(defineRulesFor({}));
+  ANONYMOUS_ABILITY = new Ability(defineRulesFor({}));
   return ANONYMOUS_ABILITY;
 }
 
 function defineRulesFor(user) {
-  const builder = new AbilityBuilder(Ability);
+  let perms = [];
 
   switch (user.role) {
     case "admin":
-      define_Admin_Rules(builder, user);
+      perms = adminperms(perms, user);
       break;
     case "tafelritter":
-      define_Anonymous_Rules(builder);
-      define_Tafelritter_Rules;
-      define_Basic_Rules(builder, user);
-      break;
-    case "teacher":
-      define_Teacher_Rules(builder, user);
-      define_Anonymous_Rules(builder);
+      perms = tafelritterperms(perms, user);
       break;
     case "visitor":
-      define_Basic_Rules(builder, user);
-      define_Anonymous_Rules(builder, user);
+      perms = visitorperms(perms, user);
+      break;
+    case "teacher":
+      perms = teacherperms(perms, user);
       break;
     default:
-      define_Anonymous_Rules(builder, user);
+      perms = anonymperms(perms, user);
       break;
   }
-
-  return builder.rules;
-}
-
-function define_Admin_Rules({ can, cannot }) {
-  can("manage", "all");
-  cannot("update", "Users", ["passwort"]);
-}
-
-function define_Tafelritter_Rules({ can, cannot }, _user) {
-  can(["read", "write", "update"], ["Rooms"]);
-  can(["read", "create"], ["Tasks"]);
-  can(["update"], ["Tasks"], { resolved: false });
-  cannot(["manage"], ["Users"]).because("You are not Allowed to see Users.");
-}
-
-function define_Teacher_Rules({ can }, user) {
-  can(["read", "create"], ["Tasks"], { creator: user._id });
-}
-
-function define_Basic_Rules({ can }, user) {
-  can("update", "User", ["name", "password", "avatar"], { _id: user._id });
-}
-
-function define_Anonymous_Rules({ can }) {
-  can("read", "Rooms");
+  return perms;
 }
 
 module.exports = {
