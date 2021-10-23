@@ -4,6 +4,7 @@ const Room = require("../models/room");
 const multer = require("multer");
 const sharp = require("sharp");
 const auditlog = require("../middleware/auditlog");
+const roomModel = require("../models/room");
 
 //set up router
 const router = new express.Router();
@@ -58,6 +59,9 @@ router.get("/", async (req, res) => {
 
 //gets the information for an room
 router.get("/:room", auth, auditlog, async (req, res) => {
+  
+  if(req.user.abb.can("read","Room"))
+
   const roomName = req.params.room;
 
   try {
