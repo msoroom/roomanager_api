@@ -31,3 +31,22 @@ const teacher = [
     condition: { creator: user._id },
   },
 ];
+
+const visitor = [
+  {
+    action: ["update"],
+    subject: ["Users"],
+    fields: ["name", "password", "avatar"],
+    condition: { _id: user._id },
+  },
+];
+
+const defaulta = [
+  {
+    action: ["read"],
+    subject: ["Rooms"],
+    fields: ["name", "pictures", "info"],
+  },
+];
+
+modeule.exports = { visitor, teacher, tafelritter, admin, defaulta };
