@@ -23,7 +23,7 @@
     "react-cookies": "0.1.1",
     "sharp": "0.27.2",
     "shortid": "2.2.16",
-    "validator": "10.9.0"
+    "validator": "13.7.0"
   },
   "devDependencies": {
     "env-cmd": "10.1.0",
