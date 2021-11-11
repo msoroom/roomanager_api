@@ -47,6 +47,9 @@ router.post("/", auth, auditlog, async (req, res) => {
 //get the name of all rooms
 
 router.get("/", async (req, res) => {
+  if (req.user.abb.cannot("read", "Room"))
+    return res.status(400).send({ error: "You are not permitted to do this" });
+
   try {
     const a = await Room.find({}, { name: 1 });
 
@@ -61,20 +64,9 @@ router.get("/:room", auth, auditlog, async (req, res) => {
   const roomName = req.params.room;
 
   try {
-    const room = await Room.findOne({ name: roomName });
-
-    if (!room) return res.status(400).send({ error: "Room not found" });
-
-    if (req.user.perms.admin) {
-      const { name, pics, props, buckedlist } = room;
-
-      return res.send({ name, pics, props, todos: buckedlist });
-    }
-
-    let information = { name: room.name };
-    if (req.user.perms.see_pics) information.pics = room.pics;
-    if (req.user.perms.see_props) information.props = room.props || {};
-    if (req.user.perms.see_todo) information.todos = room.buckedlist || {};
+    const information = await Room.find({ name: roomName }).accessibleBy(
+      req.user.abb
+    );
 
     res.send({ ...information });
   } catch (error) {

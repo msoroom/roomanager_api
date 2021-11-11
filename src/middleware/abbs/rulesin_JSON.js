@@ -62,6 +62,7 @@ module.exports.teacher = function teacherperms(perms = [], user = null) {
       {
         action: ["read"],
         subject: ["Rooms"],
+        fields: ["props"],
       },
     ],
   ];
