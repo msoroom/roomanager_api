@@ -16,6 +16,9 @@ const router = express.Router();
 
 router.post("/:room", auth, auditlog, async (req, res) => {
   // Every thing nesseary for that shit
+  if (req.user.abb.cannot("create", "Room"))
+    return res.status(401).send({ error: "Du bist nicht berechtigt" });
+
   const heading = req.body.heading;
   const discription = String(req.body.discription);
   const userid = req.user._id;
