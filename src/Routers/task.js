@@ -48,6 +48,8 @@ router.post("/:room", auth, auditlog, async (req, res) => {
 // req.body filter by any propety
 
 router.get("/all", auth, auditlog, async (req, res) => {});
+//TODO: Casle
+//TODO: Querry
 
 // gets spefic tasks
 //query options
@@ -58,7 +60,11 @@ router.get("/all", auth, auditlog, async (req, res) => {});
 
 //? limit = 10
 // skip = 10
+
 router.get("/related", auth, auditlog, async (req, res) => {
+  if (req.user.abb.cannot("read", "Room")) {
+  }
+
   const sort = {};
 
   const match = req.body !== undefined ? req.body : undefined;
