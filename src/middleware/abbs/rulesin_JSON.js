@@ -75,8 +75,9 @@ module.exports.visitorperms = function visitorperms(perms = [], user = null) {
         action: "read",
         subject: "User",
         fields: ["name", "role"],
-        condition: { id: user._id },
+        condition: { _id: user._id },
       },
+      [{ action: "delete", subject: "User", condition: { _id: user._id } }],
     ],
   ];
 };
