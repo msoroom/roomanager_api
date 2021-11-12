@@ -127,6 +127,10 @@ router.get("/users/all/admin", auth, auditlog, async (req, res) => {
 });
 
 router.delete("/users/me", auth, auditlog, async (req, res) => {
+  if (req.user.abb.cannot("delete", "User", { _id: req.user._id }))
+    return res
+      .status(401)
+      .send({ error: "Du kannst keien andern nutzer löschen" });
   try {
     await req.user.remove();
 
@@ -137,7 +141,7 @@ router.delete("/users/me", auth, auditlog, async (req, res) => {
 });
 // gets the permissions for an user
 router.get("/users/me/auth", auth, auditlog, async (req, res) => {
-  res.send(req.user.perms);
+  res.send(req.user.abb);
 });
 // updates a user
 router.patch("/users/:id", auth, auditlog, async (req, res) => {

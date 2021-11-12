@@ -16,6 +16,9 @@ const router = express.Router();
 
 router.post("/:room", auth, auditlog, async (req, res) => {
   // Every thing nesseary for that shit
+  if (req.user.abb.cannot("create", "Room"))
+    return res.status(401).send({ error: "Du bist nicht berechtigt" });
+
   const heading = req.body.heading;
   const discription = String(req.body.discription);
   const userid = req.user._id;
@@ -45,6 +48,8 @@ router.post("/:room", auth, auditlog, async (req, res) => {
 // req.body filter by any propety
 
 router.get("/all", auth, auditlog, async (req, res) => {});
+//TODO: Casle
+//TODO: Querry
 
 // gets spefic tasks
 //query options
@@ -55,7 +60,11 @@ router.get("/all", auth, auditlog, async (req, res) => {});
 
 //? limit = 10
 // skip = 10
+
 router.get("/related", auth, auditlog, async (req, res) => {
+  if (req.user.abb.cannot("read", "Room")) {
+  }
+
   const sort = {};
 
   const match = req.body !== undefined ? req.body : undefined;
