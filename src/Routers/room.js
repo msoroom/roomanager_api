@@ -27,7 +27,7 @@ const upload = multer({
 //router routes
 router.post("/", auth, auditlog, async (req, res) => {
   try {
-    if (!req.user.abb.can("create", "room")) {
+    if (req.user.abb.cannot("create", "room")) {
       return res
         .status(400)
         .send({ error: "You are not permitted to do this" });
@@ -42,6 +42,7 @@ router.post("/", auth, auditlog, async (req, res) => {
     const done = await room.save();
     res.status(200).send(done);
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 });
@@ -62,9 +63,8 @@ router.get("/", async (req, res) => {
 
 //gets the information for an room
 router.get("/:room", auth, auditlog, async (req, res) => {
-  
-  if(req.user.abb.can("read","Room"))
-
+  if (req.user.abb.cannot("read", "Room"))
+    return res.send({ error: "Not engouth permissons" });
   const roomName = req.params.room;
 
   try {
@@ -80,17 +80,6 @@ router.get("/:room", auth, auditlog, async (req, res) => {
 
 router.patch("/:room/admin", auth, auditlog, async (req, res) => {
   //valid stuff
-  var validUpdates = [];
-  if (req.user.perms.admin) {
-    validUpdates = ["props", "buckedlist"];
-  } else {
-    if (req.user.perms.edit_todo) {
-      validUpdates.push("buckedlist");
-    }
-    if (req.user.perms.edit_props) {
-      validUpdates.push("props");
-    }
-  }
 
   //stuff
   const roomname = req.params.room;

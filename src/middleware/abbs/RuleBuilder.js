@@ -26,7 +26,7 @@ function defineAbilityFor(user) {
 }
 
 function defineRulesFor(user) {
-  let perms = [];
+  let perms;
 
   switch (user.role) {
     case "admin":

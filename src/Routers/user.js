@@ -141,6 +141,7 @@ router.delete("/users/me", auth, auditlog, async (req, res) => {
 });
 // gets the permissions for an user
 router.get("/users/me/auth", auth, auditlog, async (req, res) => {
+  console.log("hey:");
   res.send(req.user.abb);
 });
 // updates a user

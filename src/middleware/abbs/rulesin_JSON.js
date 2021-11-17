@@ -6,6 +6,7 @@ module.exports.adminperms = function adminperms(perms = [], user = null) {
         action: "manage",
         subject: ["Rooms", "Tasks"],
       },
+
       {
         action: ["update", "read"],
         subject: "User",
@@ -16,7 +17,7 @@ module.exports.adminperms = function adminperms(perms = [], user = null) {
         action: ["update", "read"],
         subject: "User",
         fields: "role",
-        condition: { role: "admin", inverted: true },
+        condition: { _id: user._id, inverted: true },
       },
     ],
   ];

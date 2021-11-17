@@ -13,7 +13,7 @@ const userOne = {
   _id: userOneId,
   name: "Jonas1",
   password: "Jojoasdggjo ich bins",
-  role: "visitor",
+  role: "admin",
   tokens: [
     {
       token: jwt.sign({ _id: userOneId }, process.env.JWT_SECRET),
