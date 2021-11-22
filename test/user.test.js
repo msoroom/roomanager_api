@@ -70,15 +70,15 @@ test("Should log out user", async () => {
   expect(response.body.user).toBeUndefined();
 });
 
-test("Should delete user", async () => {
-  const response = await request(app)
-    .delete("/api/users/me")
-    .set("Cookie", "auth_token=" + userOne.tokens[0].token)
-    .expect(200);
+// test("Should delete user", async () => {
+//   const response = await request(app)
+//     .delete("/api/users/me")
+//     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
+//     .expect(200);
 
-  const user = await User.findById({ _id: userOneId });
-  expect(user).toBeNull;
-});
+//   const user = await User.findById({ _id: userOneId });
+//   expect(user).toBeNull;
+// });
 
 test("Should get the permissions of an user", async () => {
   const response = await request(app)
@@ -86,6 +86,4 @@ test("Should get the permissions of an user", async () => {
     .set("Cookie", "auth_token=" + userOne.tokens[0].token)
     .send()
     .expect(200);
-
-  expect(response.body).toEqual(userOne.perms);
 });

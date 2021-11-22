@@ -130,7 +130,7 @@ router.post(
 );
 
 router.delete("/:room/pic/admin", auth, auditlog, async (req, res) => {
-  if (!(req.user.perms.edit_pics || req.user.perms.admin))
+  if (req.user.abb.cannot("delete", "Rooms", "pics"))
     return res.status(400).send({ error: "you are not permitted to update" });
 
   const delbil = req.body;

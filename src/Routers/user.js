@@ -126,19 +126,20 @@ router.get("/users/all/admin", auth, auditlog, async (req, res) => {
   }
 });
 
-router.delete("/users/me", auth, auditlog, async (req, res) => {
-  if (req.user.abb.cannot("delete", "User", { _id: req.user._id }))
-    return res
-      .status(401)
-      .send({ error: "Du kannst keien andern nutzer löschen" });
-  try {
-    await req.user.remove();
+// router.delete("/users/me", auth, auditlog, async (req, res) => {
+//   if (req.user.abb.cannot("delete", "User", { _id: req.user._id }))
+//     return res
+//       .status(401)
+//       .send({ error: "Du kannst keien andern nutzer löschen" });
+//   try {
+//     await req.user.remove();
 
-    res.send(req.user);
-  } catch (error) {
-    res.status(500).send();
-  }
-});
+//     res.send(req.user);
+//   } catch (error) {
+//     res.status(500).send();
+//   }
+// });
+
 // gets the permissions for an user
 router.get("/users/me/auth", auth, auditlog, async (req, res) => {
   console.log("hey:");
